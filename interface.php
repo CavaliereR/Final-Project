@@ -7,5 +7,16 @@ function dbConnect() {
     return $sqlcon;
 }
 
-
 ?>
+
+
+<html>
+    <head>
+</head>
+
+<body>
+    <a href="log.php"><button>Add a New Student</button></a>
+
+</body>
+
+</html>
