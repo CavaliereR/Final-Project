@@ -30,9 +30,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } elseif ($newPassword !== $confirmPassword) {
         $error = 'Passwords do not match.';
     } else {
-        // Update password in the correct table using 'name' column
         $name = $_SESSION['reset_name'];
-        $table = $_SESSION['reset_table']; // 'student' or 'teacher'
+        $table = $_SESSION['reset_table'];
         
         $query = "UPDATE $table SET password = '$newPassword' WHERE name = '$name'";
         
@@ -47,7 +46,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['name'] = $name;
             $_SESSION['role'] = $_SESSION['reset_role'];
             
-            header("Refresh: 3; URL=index.php");
+            // Redirect after 3 seconds using meta refresh
+            echo '<meta http-equiv="refresh" content="3;url=index.php">';
         } else {
             $error = 'Failed to update password. Please try again.';
         }
@@ -100,18 +100,26 @@ mysqli_close($connection);
             font-weight: 600;
             width: 100%;
             border: none;
+            cursor: pointer;
             transition: all 0.3s ease;
         }
         .btn-update:hover {
             background-color: #218838;
-            transform: translateY(-2px);
+        }
+        .alert {
+            border-radius: 10px;
         }
     </style>
 </head>
 <body>
     <div class="school-header">
         <div class="container">
-            <h4 class="text-center">🏫 Reset Password</h4>
+            <div class="d-flex align-items-center">
+                <a href="index.php" class="text-white text-decoration-none">
+                    <i class="fas fa-arrow-left me-2"></i>
+                </a>
+                <h4 class="flex-grow-1 text-center">🏫 Reset Password</h4>
+            </div>
         </div>
     </div>
 
@@ -162,6 +170,5 @@ mysqli_close($connection);
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

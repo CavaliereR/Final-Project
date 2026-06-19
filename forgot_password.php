@@ -21,22 +21,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name = mysqli_real_escape_string($connection, $_POST['name']);
     $role = mysqli_real_escape_string($connection, $_POST['role']);
     
-    // Determine which table to query
     $table = ($role == 'student') ? 'student' : 'teacher';
     
-    // Check if user exists in the appropriate table using 'name' column
     $query = "SELECT * FROM $table WHERE name = '$name'";
     $result = mysqli_query($connection, $query);
     
     if ($result && mysqli_num_rows($result) > 0) {
         $user = mysqli_fetch_assoc($result);
         
-        // Store user info in session for the reset process
         $_SESSION['reset_name'] = $name;
         $_SESSION['reset_role'] = $role;
         $_SESSION['reset_table'] = $table;
+        $_SESSION['reset_password'] = $user['password'];
         
-        // Redirect to enter email page
         header('Location: forgot_password_enter_email.php');
         exit;
     } else {
@@ -110,20 +107,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             font-weight: 600;
             width: 100%;
             border: none;
+            cursor: pointer;
             transition: all 0.3s ease;
         }
         
         .btn-reset:hover {
             background-color: #6d0000;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(139, 0, 0, 0.3);
+        }
+        
+        .alert-danger {
+            border-radius: 10px;
         }
     </style>
 </head>
 <body>
     <div class="school-header">
         <div class="container">
-            <h4 class="text-center">🏫 Password Recovery</h4>
+            <div class="d-flex align-items-center">
+                <a href="index.php" class="text-white text-decoration-none">
+                    <i class="fas fa-arrow-left me-2"></i>
+                </a>
+                <h4 class="flex-grow-1 text-center">🏫 Password Recovery</h4>
+            </div>
         </div>
     </div>
 
@@ -136,10 +141,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <p class="text-center text-muted">Enter your name to reset your password</p>
             
             <?php if($error): ?>
-                <div class="alert alert-danger alert-dismissible fade show">
+                <div class="alert alert-danger">
                     <i class="fas fa-exclamation-circle me-2"></i>
                     <?php echo $error; ?>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
             <?php endif; ?>
             
@@ -172,6 +176,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -2,7 +2,7 @@
 session_start();
 
 // Redirect if already logged in
-if(isset($_SESSION['username']) && isset($_SESSION['role'])) {
+if(isset($_SESSION['name']) && isset($_SESSION['role'])) {
     if($_SESSION['role'] == 'student') {
         header("Location: quiz.php");
         exit();
@@ -17,13 +17,10 @@ if(isset($_SESSION['username']) && isset($_SESSION['role'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>School Quiz System</title>
-    <!-- Bootstrap CSS -->
+    <title>University of the East</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* School Theme */
         body {
             background-color: #f0f0f0;
             min-height: 100vh;
@@ -32,7 +29,7 @@ if(isset($_SESSION['username']) && isset($_SESSION['role'])) {
         }
         
         .school-header {
-            background-color: #8B0000; /* Dark Red - School Color */
+            background-color: #8B0000;
             color: white;
             padding: 20px 0;
             position: fixed;
@@ -85,7 +82,6 @@ if(isset($_SESSION['username']) && isset($_SESSION['role'])) {
             padding: 30px 20px;
             text-align: center;
             transition: all 0.3s ease;
-            cursor: pointer;
             text-decoration: none;
             color: #333;
             display: block;
@@ -154,8 +150,8 @@ if(isset($_SESSION['username']) && isset($_SESSION['role'])) {
     <!-- School Header -->
     <div class="school-header text-center">
         <div class="container">
-            <h1>University of the East</h1>
-            <div class="subtitle">Tomorrow begins in the East</div>
+            <h1>🏫 University of the East</h1>
+            <div class="subtitle">Excellence in Education</div>
         </div>
     </div>
 
@@ -195,7 +191,5 @@ if(isset($_SESSION['username']) && isset($_SESSION['role'])) {
         </div>
     </div>
 
-    <!-- Bootstrap JS Bundle -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

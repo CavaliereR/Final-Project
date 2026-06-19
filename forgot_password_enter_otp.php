@@ -18,7 +18,7 @@ $message = '';
 $error = '';
 
 if (!isset($_SESSION['otp_sent'])) {
-    $_SESSION['otp'] = (string)random_int(100000, 999999); // random otp, don't forget to turn it to string to make it work
+    $_SESSION['otp'] = (string)random_int(100000, 999999);
 
     $subject = 'Did you ask for a change of password?';
     $msg = "Hello " . $name . ",\n\n";
@@ -35,13 +35,12 @@ if (!isset($_SESSION['otp_sent'])) {
     }
 
     $_SESSION['otp_sent'] = true;
-    $_SESSION['otp_time'] = time(); // Store timestamp for expiry
+    $_SESSION['otp_time'] = time();
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['enteredotp'])) {
     $enteredOtp = trim($_POST['enteredotp']);
     
-    // Check if OTP is expired (10 minutes)
     if (isset($_SESSION['otp_time']) && (time() - $_SESSION['otp_time']) > 600) {
         $error = 'OTP has expired. Please request a new one.';
         unset($_SESSION['otp_sent'], $_SESSION['otp'], $_SESSION['otp_time']);
@@ -142,13 +141,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['enteredotp'])) {
             font-weight: 600;
             width: 100%;
             border: none;
+            cursor: pointer;
             transition: all 0.3s ease;
         }
         
         .btn-verify:hover {
             background-color: #6d0000;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(139, 0, 0, 0.3);
         }
         
         .btn-verify i {
@@ -162,15 +160,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['enteredotp'])) {
             border-radius: 10px;
             font-weight: 500;
             border: none;
+            text-decoration: none;
+            display: inline-block;
             transition: all 0.3s ease;
         }
         
         .btn-resend:hover {
             background-color: #5a6268;
-            transform: translateY(-2px);
+            color: white;
         }
         
-        .alert-success, .alert-danger {
+        .alert {
             border-radius: 10px;
         }
         
@@ -195,6 +195,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['enteredotp'])) {
         .otp-timer {
             color: #666;
             font-size: 14px;
+        }
+        
+        .info-box {
+            background-color: #cce5ff;
+            border: 1px solid #b8daff;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
         }
     </style>
 </head>
@@ -221,22 +229,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['enteredotp'])) {
             <p class="sub-text">We've sent a verification code to your email</p>
             
             <?php if ($message): ?>
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <div class="alert alert-success">
                     <i class="fas fa-check-circle me-2"></i>
                     <?php echo htmlspecialchars($message); ?>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
             <?php endif; ?>
 
             <?php if ($error): ?>
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <div class="alert alert-danger">
                     <i class="fas fa-exclamation-circle me-2"></i>
                     <?php echo htmlspecialchars($error); ?>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
             <?php endif; ?>
 
-            <div class="alert alert-info">
+            <div class="info-box">
                 <i class="fas fa-envelope me-2"></i>
                 We have sent an email to <strong><?php echo htmlspecialchars($senderemail); ?></strong> with the OTP.
             </div>
@@ -249,7 +255,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['enteredotp'])) {
             <p>Your current password hash is:</p>
             <div class="password-hash">
                 <?php 
-                // Get current password from session or database
                 $currentPassword = $_SESSION['reset_password'] ?? '';
                 echo htmlspecialchars(md5($currentPassword)); 
                 ?>
@@ -283,6 +288,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['enteredotp'])) {
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -12,7 +12,6 @@ $error = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['email'])) {
     $email = trim($_POST['email']);
     
-    // Validate email format
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $error = 'Please enter a valid email address.';
     } else {
@@ -69,18 +68,26 @@ $currentEmail = $_SESSION['reset_email'] ?? '';
             font-weight: 600;
             width: 100%;
             border: none;
+            cursor: pointer;
             transition: all 0.3s ease;
         }
         .btn-send:hover {
             background-color: #6d0000;
-            transform: translateY(-2px);
+        }
+        .alert-danger {
+            border-radius: 10px;
         }
     </style>
 </head>
 <body>
     <div class="school-header">
         <div class="container">
-            <h4 class="text-center">🏫 Email Verification</h4>
+            <div class="d-flex align-items-center">
+                <a href="forgot_password.php" class="text-white text-decoration-none">
+                    <i class="fas fa-arrow-left me-2"></i>
+                </a>
+                <h4 class="flex-grow-1 text-center">🏫 Email Verification</h4>
+            </div>
         </div>
     </div>
 
@@ -115,6 +122,5 @@ $currentEmail = $_SESSION['reset_email'] ?? '';
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

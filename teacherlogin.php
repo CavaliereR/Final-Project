@@ -25,9 +25,8 @@ if(isset($_POST['name']) && isset($_POST['password']))
 {
     $name = mysqli_real_escape_string($connection, $_POST['name']);
     $password = $_POST['password'];
-    $role = 'teacher'; // Fixed role for teacher login
+    $role = 'teacher';
 
-    // Query teacher table using 'name' column
     $query = "SELECT * FROM teacher WHERE name = '$name'";
     $result = mysqli_query($connection, $query);
 
@@ -143,13 +142,12 @@ if(isset($_POST['name']) && isset($_POST['password']))
             font-weight: 600;
             width: 100%;
             border: none;
+            cursor: pointer;
             transition: all 0.3s ease;
         }
         
         .btn-login:hover {
             background-color: #218838;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
         }
         
         .btn-login i {
@@ -204,10 +202,9 @@ if(isset($_POST['name']) && isset($_POST['password']))
             <p class="sub-text">Sign in to manage your classes</p>
             
             <?php if($error): ?>
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <div class="alert alert-danger">
                     <i class="fas fa-exclamation-circle me-2"></i>
                     <?php echo $error; ?>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
             <?php endif; ?>
             
@@ -253,6 +250,5 @@ if(isset($_POST['name']) && isset($_POST['password']))
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
