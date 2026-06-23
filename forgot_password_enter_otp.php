@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-if (!isset($_SESSION['reset_name'])) {
+if (!isset($_SESSION['reset_fullname'])) {
     header('Location: forgot_password.php');
     exit;
 }
@@ -12,7 +12,7 @@ if (!isset($_SESSION['reset_email'])) {
 }
 
 $senderemail = $_SESSION['reset_email'];
-$name = $_SESSION['reset_name'];
+$fullname = $_SESSION['reset_fullname'];
 
 $message = '';
 $error = '';
@@ -21,11 +21,11 @@ if (!isset($_SESSION['otp_sent'])) {
     $_SESSION['otp'] = (string)random_int(100000, 999999);
 
     $subject = 'Did you ask for a change of password?';
-    $msg = "Hello " . $name . ",\n\n";
+    $msg = "Hello " . $fullname . ",\n\n";
     $msg .= 'Your OTP is: ' . $_SESSION['otp'] . "\n\n";
     $msg .= 'This OTP will expire after 10 minutes.';
-    $headers = 'From: robbjason28@gmail.com\r\n' .
-               'Reply-To: robbjason28@gmail.com\r\n' .
+    $headers = 'From: noreply@quizsystem.com\r\n' .
+               'Reply-To: noreply@quizsystem.com\r\n' .
                'X-Mailer: PHP/' . phpversion();
 
     if (mail($senderemail, $subject, $msg, $headers)) {

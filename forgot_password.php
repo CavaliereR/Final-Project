@@ -6,7 +6,7 @@ $connection = mysqli_connect(
     "localhost",
     "root",
     "",
-    "qez"
+    "onlinequizdb"  // Using the new database
 );
 
 if (!$connection) {
@@ -18,21 +18,21 @@ $error = '';
 $role = isset($_GET['role']) ? $_GET['role'] : '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $name = mysqli_real_escape_string($connection, $_POST['name']);
+    $fullname = mysqli_real_escape_string($connection, $_POST['fullname']);
     $role = mysqli_real_escape_string($connection, $_POST['role']);
     
-    $table = ($role == 'student') ? 'student' : 'teacher';
-    
-    $query = "SELECT * FROM $table WHERE name = '$name'";
+    // Query the users table
+    $query = "SELECT * FROM users WHERE fullname = '$fullname' AND role = '$role'";
     $result = mysqli_query($connection, $query);
     
     if ($result && mysqli_num_rows($result) > 0) {
         $user = mysqli_fetch_assoc($result);
         
-        $_SESSION['reset_name'] = $name;
+        $_SESSION['reset_fullname'] = $fullname;
         $_SESSION['reset_role'] = $role;
-        $_SESSION['reset_table'] = $table;
-        $_SESSION['reset_password'] = $user['password'];
+        $_SESSION['reset_userID'] = $user['userID'];
+        $_SESSION['reset_password'] = $user['password']; // For display only
+        $_SESSION['reset_email'] = $user['email']; // Pre-fill email
         
         header('Location: forgot_password_enter_email.php');
         exit;
@@ -124,7 +124,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="school-header">
         <div class="container">
             <div class="d-flex align-items-center">
-                <a href="index.php" class="text-white text-decoration-none">
+                <a href="Login.php" class="text-white text-decoration-none">
                     <i class="fas fa-arrow-left me-2"></i>
                 </a>
                 <h4 class="flex-grow-1 text-center">🏫 Password Recovery</h4>
@@ -138,7 +138,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <i class="fas fa-key"></i>
             </div>
             <h3 class="text-center">Forgot Password</h3>
-            <p class="text-center text-muted">Enter your name to reset your password</p>
+            <p class="text-center text-muted">Enter your full name and role to reset your password</p>
             
             <?php if($error): ?>
                 <div class="alert alert-danger">
@@ -149,17 +149,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             
             <form method="post" action="forgot_password.php">
                 <div class="mb-3">
-                    <label class="form-label fw-bold">Name</label>
-                    <input type="text" class="form-control" name="name" required 
-                           placeholder="Enter your name">
+                    <label class="form-label fw-bold">Full Name</label>
+                    <input type="text" class="form-control" name="fullname" required 
+                           placeholder="Enter your full name">
                 </div>
                 
                 <div class="mb-3">
                     <label class="form-label fw-bold">Role</label>
                     <select class="form-select" name="role" required>
                         <option value="">Select your role</option>
-                        <option value="student" <?php echo ($role == 'student') ? 'selected' : ''; ?>>Student</option>
-                        <option value="teacher" <?php echo ($role == 'teacher') ? 'selected' : ''; ?>>Teacher</option>
+                        <option value="Student" <?php echo ($role == 'Student') ? 'selected' : ''; ?>>Student</option>
+                        <option value="Teacher" <?php echo ($role == 'Teacher') ? 'selected' : ''; ?>>Teacher</option>
                     </select>
                 </div>
                 
@@ -169,8 +169,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </form>
             
             <div class="text-center mt-3">
-                <a href="index.php" class="text-decoration-none">
-                    <i class="fas fa-arrow-left"></i> Back to Home
+                <a href="Login.php" class="text-decoration-none">
+                    <i class="fas fa-arrow-left"></i> Back to Login
                 </a>
             </div>
         </div>

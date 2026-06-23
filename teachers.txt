@@ -1,2 +1,0 @@
-teacher1,1234
-teacher2,5678

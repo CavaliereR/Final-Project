@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-if (!isset($_SESSION['reset_name'])) {
+if (!isset($_SESSION['reset_fullname'])) {
     header('Location: forgot_password.php');
     exit;
 }
@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['email'])) {
     }
 }
 
-$name = $_SESSION['reset_name'];
+$fullname = $_SESSION['reset_fullname'];
 $currentEmail = $_SESSION['reset_email'] ?? '';
 ?>
 
@@ -94,7 +94,7 @@ $currentEmail = $_SESSION['reset_email'] ?? '';
     <div class="container">
         <div class="email-container">
             <h3 class="text-center">Enter Your Email</h3>
-            <p class="text-center text-muted">Welcome, <?php echo htmlspecialchars($name); ?>!</p>
+            <p class="text-center text-muted">Welcome, <?php echo htmlspecialchars($fullname); ?>!</p>
             
             <?php if ($error): ?>
                 <div class="alert alert-danger">

@@ -6,14 +6,14 @@ $connection = mysqli_connect(
     "localhost",
     "root",
     "",
-    "qez"
+    "onlinequizdb"
 );
 
 if (!$connection) {
     die("Connection failed: " . mysqli_connect_error());
 }
 
-if (!isset($_SESSION['reset_name']) || !isset($_SESSION['otp_verified']) || $_SESSION['otp_verified'] !== true) {
+if (!isset($_SESSION['reset_email']) || !isset($_SESSION['otp_verified']) || $_SESSION['otp_verified'] !== true) {
     header('Location: forgot_password.php');
     exit;
 }
@@ -30,24 +30,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } elseif ($newPassword !== $confirmPassword) {
         $error = 'Passwords do not match.';
     } else {
-        $name = $_SESSION['reset_name'];
-        $table = $_SESSION['reset_table'];
+        $email = $_SESSION['reset_email'];
+        $role = $_SESSION['reset_role'];
         
-        $query = "UPDATE $table SET password = '$newPassword' WHERE name = '$name'";
+        // Hash the new password (matches his login system)
+        $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+        
+        // Update the users table
+        $query = "UPDATE users SET password = '$hashedPassword' WHERE email = '$email' AND role = '$role'";
         
         if (mysqli_query($connection, $query)) {
             $message = 'Password updated successfully!';
             
+            // Auto-login the user
+            $_SESSION['userID'] = $_SESSION['reset_userID'];
+            $_SESSION['role'] = $role;
+            $_SESSION['fullname'] = $_SESSION['reset_fullname'];
+            
             // Clear reset session data
-            unset($_SESSION['reset_name'], $_SESSION['reset_role'], $_SESSION['reset_table']);
+            unset($_SESSION['reset_email'], $_SESSION['reset_role'], $_SESSION['reset_userID']);
+            unset($_SESSION['reset_fullname'], $_SESSION['reset_password']);
             unset($_SESSION['otp_verified'], $_SESSION['otp'], $_SESSION['otp_sent'], $_SESSION['otp_time']);
             
-            // Auto-login the user
-            $_SESSION['name'] = $name;
-            $_SESSION['role'] = $_SESSION['reset_role'];
-            
-            // Redirect after 3 seconds using meta refresh
-            echo '<meta http-equiv="refresh" content="3;url=index.php">';
+            // Redirect based on role
+            if ($role == "Teacher") {
+                echo '<meta http-equiv="refresh" content="3;url=TeacherDashboard.php">';
+            } else {
+                echo '<meta http-equiv="refresh" content="3;url=StudentDashboard.php">';
+            }
         } else {
             $error = 'Failed to update password. Please try again.';
         }
@@ -115,7 +125,7 @@ mysqli_close($connection);
     <div class="school-header">
         <div class="container">
             <div class="d-flex align-items-center">
-                <a href="index.php" class="text-white text-decoration-none">
+                <a href="Login.php" class="text-white text-decoration-none">
                     <i class="fas fa-arrow-left me-2"></i>
                 </a>
                 <h4 class="flex-grow-1 text-center">🏫 Reset Password</h4>
@@ -126,14 +136,14 @@ mysqli_close($connection);
     <div class="container">
         <div class="reset-container">
             <h3 class="text-center">Set New Password</h3>
-            <p class="text-center text-muted">User: <?php echo htmlspecialchars($_SESSION['reset_name']); ?></p>
+            <p class="text-center text-muted">User: <?php echo htmlspecialchars($_SESSION['reset_fullname'] ?? ''); ?></p>
             
             <?php if($message): ?>
                 <div class="alert alert-success">
                     <i class="fas fa-check-circle me-2"></i>
                     <?php echo $message; ?>
                 </div>
-                <p class="text-center">Redirecting to home page...</p>
+                <p class="text-center">Redirecting to dashboard...</p>
             <?php endif; ?>
             
             <?php if($error): ?>
@@ -163,8 +173,8 @@ mysqli_close($connection);
             <?php endif; ?>
             
             <div class="text-center mt-3">
-                <a href="index.php" class="text-decoration-none">
-                    <i class="fas fa-home"></i> Back to Home
+                <a href="Login.php" class="text-decoration-none">
+                    <i class="fas fa-home"></i> Back to Login
                 </a>
             </div>
         </div>
