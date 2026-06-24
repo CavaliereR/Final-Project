@@ -2,9 +2,9 @@
 session_start();
 include("Database.php");
 
-
+// Check if teacher is logged in
 if (!isset($_SESSION['userID']) || $_SESSION['role'] !== 'Teacher') {
-    header("Location: index.php");
+    header("Location: Login.php");
     exit();
 }
 
@@ -12,16 +12,16 @@ $quizID = $_GET['id'];
 $message = '';
 $error = '';
 
-
+// Handle question deletion
 if (isset($_GET['delete'])) {
     $questionID = $_GET['delete'];
     
-
+    // Check if this question has submissions (file uploads)
     $checkSubmissions = mysqli_query($conn, "SELECT * FROM submissions WHERE questionID='$questionID'");
     if (mysqli_num_rows($checkSubmissions) > 0) {
         $error = "Cannot delete this question because students have already submitted files for it.";
     } else {
-
+        // Delete the question
         $deleteQuery = "DELETE FROM questions WHERE questionID='$questionID' AND quizID='$quizID'";
         if (mysqli_query($conn, $deleteQuery)) {
             $message = "Question deleted successfully!";
@@ -33,25 +33,27 @@ if (isset($_GET['delete'])) {
 
 if(isset($_POST['save']))
 {
-    $question = trim($_POST['question']);
-    $question_type = $_POST['question_type'];
+    // ESCAPE ALL INPUTS to handle quotes and special characters
+    $question = mysqli_real_escape_string($conn, trim($_POST['question']));
+    $question_type = mysqli_real_escape_string($conn, $_POST['question_type']);
     
-
+    // Validate question text
     if (empty($question)) {
         $error = "Question text is required.";
     } elseif ($question_type == 'mcq') {
-        $a = trim($_POST['a']);
-        $b = trim($_POST['b']);
-        $c = trim($_POST['c']);
-        $d = trim($_POST['d']);
-        $answer = trim($_POST['answer']);
-   
+        $a = mysqli_real_escape_string($conn, trim($_POST['a']));
+        $b = mysqli_real_escape_string($conn, trim($_POST['b']));
+        $c = mysqli_real_escape_string($conn, trim($_POST['c']));
+        $d = mysqli_real_escape_string($conn, trim($_POST['d']));
+        $answer = mysqli_real_escape_string($conn, trim($_POST['answer']));
+        
+        // Validate MCQ fields
         if (empty($a) || empty($b) || empty($c) || empty($d)) {
             $error = "All choices (A, B, C, D) are required.";
         } elseif (empty($answer)) {
             $error = "Correct answer is required. Please enter the correct choice.";
         } else {
- 
+            // Check if answer matches one of the choices
             $validAnswers = array($a, $b, $c, $d);
             if (!in_array($answer, $validAnswers)) {
                 $error = "Correct answer must match one of the provided choices.";
@@ -67,7 +69,7 @@ if(isset($_POST['save']))
             }
         }
     } else {
-
+        // File upload question - no choices needed
         $sql = "INSERT INTO questions (quizID, questionText, choiceA, choiceB, choiceC, choiceD, answer, question_type)
                 VALUES ('$quizID', '$question', '', '', '', '', '', 'file')";
         
@@ -79,7 +81,7 @@ if(isset($_POST['save']))
     }
 }
 
-
+// Get quiz title for display
 $quiz = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM quizzes WHERE quizID='$quizID'"));
 ?>
 
@@ -114,14 +116,12 @@ $quiz = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM quizzes WHERE quiz
         .question-actions {
             white-space: nowrap;
         }
-        .delete-btn {
-            color: #dc3545;
-            cursor: pointer;
-            transition: all 0.3s ease;
+        .btn-sm {
+            font-size: 0.875rem;
+            padding: 0.25rem 0.5rem;
         }
-        .delete-btn:hover {
-            color: #a71d2a;
-            transform: scale(1.1);
+        .btn-sm i {
+            margin-right: 5px;
         }
         body{
     background:#f8f9fa;
@@ -223,6 +223,7 @@ $quiz = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM quizzes WHERE quiz
                 <div class="mb-3">
                     <label class="form-label fw-bold required-field">Question</label>
                     <textarea name="question" class="form-control" rows="3" placeholder="Enter your question" required></textarea>
+                    <small class="text-muted">You can use apostrophes and special characters (they will be saved correctly)</small>
                 </div>
 
            
@@ -297,7 +298,7 @@ $quiz = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM quizzes WHERE quiz
                             '<span class="badge bg-primary"><i class="fas fa-list-ul"></i> Multiple Choice</span>';
                     
                     $answer = ($q['question_type'] == 'file') ? 
-                              '<span class="text-muted"><i>File upload (no specific answer)</i></span>' : 
+                              '<span class="text-muted"><i>N/A</i></span>' : 
                               '<span class="badge bg-success">' . htmlspecialchars($q['answer']) . '</span>';
                     
                     $questionText = htmlspecialchars($q['questionText']);
@@ -310,10 +311,10 @@ $quiz = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM quizzes WHERE quiz
                             <td>{$questionText}</td>
                             <td>{$type}</td>
                             <td>{$answer}</td>
-                            <td class='question-actions'>
+                            <td>
                                 <a href='AddQuestion.php?id={$quizID}&delete={$q['questionID']}' 
-                                class='btn btn-danger btn-sm' 
-                                onclick='return confirm(\"Delete this question?\");'>
+                                   class='btn btn-danger btn-sm' 
+                                   onclick='return confirm(\"Delete this question?\");'>
                                     <i class='fas fa-trash'></i> Delete
                                 </a>
                             </td>
