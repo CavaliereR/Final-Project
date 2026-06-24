@@ -45,14 +45,18 @@ $result = mysqli_query($conn, "SELECT * FROM quizzes");
                         <span class="badge bg-warning"><?php echo $fileQ; ?> file uploads</span>
                     <?php endif; ?>
                 </td>
-                <td>
-                    <a href="AddQuestion.php?id=<?php echo $row['quizID']; ?>" class="btn btn-success btn-sm">
-                        <i class="fas fa-plus"></i> Questions
-                    </a>
-                    <a href="DeleteQuiz.php?id=<?php echo $row['quizID']; ?>" class="btn btn-danger btn-sm">
-                        <i class="fas fa-trash"></i> Delete
-                    </a>
-                </td>
+                    <td>
+                        <a href="AddQuestion.php?id=<?php echo $row['quizID']; ?>" class="btn btn-success btn-sm">
+                            <i class="fas fa-plus"></i> Questions
+                        </a>
+                        <a href="EditQuiz.php?id=<?php echo $row['quizID']; ?>" class="btn btn-warning btn-sm">
+                            <i class="fas fa-edit"></i> Edit
+                        </a>
+                        <a href="DeleteQuiz.php?id=<?php echo $row['quizID']; ?>" class="btn btn-danger btn-sm" 
+                        onclick="return confirm('Are you sure you want to delete this quiz?')">
+                            <i class="fas fa-trash"></i> Delete
+                        </a>
+                    </td>
             </tr>
         <?php } ?>
     </table>
@@ -63,6 +67,7 @@ $result = mysqli_query($conn, "SELECT * FROM quizzes");
     <a href="CreateQuiz.php" class="btn btn-success">
         <i class="fas fa-plus"></i> Create Quiz
     </a>
+    
 </div>
 
 </body>

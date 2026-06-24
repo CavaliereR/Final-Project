@@ -124,7 +124,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="school-header">
         <div class="container">
             <div class="d-flex align-items-center">
-                <a href="Login.php" class="text-white text-decoration-none">
+                <a href="index.php" class="text-white text-decoration-none">
                     <i class="fas fa-arrow-left me-2"></i>
                 </a>
                 <h4 class="flex-grow-1 text-center">🏫 Password Recovery</h4>
@@ -169,7 +169,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </form>
             
             <div class="text-center mt-3">
-                <a href="Login.php" class="text-decoration-none">
+                <a href="index.php" class="text-decoration-none">
                     <i class="fas fa-arrow-left"></i> Back to Login
                 </a>
             </div>

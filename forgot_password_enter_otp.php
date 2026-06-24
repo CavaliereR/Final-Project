@@ -252,13 +252,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['enteredotp'])) {
             </p>
             
             <br>
-            <p>Your current password hash is:</p>
-            <div class="password-hash">
-                <?php 
-                $currentPassword = $_SESSION['reset_password'] ?? '';
-                echo htmlspecialchars(md5($currentPassword)); 
-                ?>
-            </div>
             <br><br>
 
             <form method="post" action="forgot_password_enter_otp.php">

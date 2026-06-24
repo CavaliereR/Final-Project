@@ -2,20 +2,37 @@
 session_start();
 include("Database.php");
 
+if (!isset($_SESSION['userID']) || $_SESSION['role'] !== 'Teacher') {
+    header("Location: index.php");
+    exit();
+}
+
+$error = '';
+$success = '';
+
 if(isset($_POST['save']))
 {
-    $title = $_POST['title'];
-    $description = $_POST['description'];
-    $timeLimit = $_POST['timeLimit'];
-
-    $sql = "INSERT INTO quizzes
-    (quizTitle,description,timeLimit)
-    VALUES
-    ('$title','$description','$timeLimit')";
-
-    mysqli_query($conn,$sql);
-
-    echo "<div class='alert alert-success'>Quiz Created</div>";
+    $title = trim($_POST['title']);
+    $description = trim($_POST['description']);
+    $timeLimit = (int)$_POST['timeLimit'];
+    
+    // Validation
+    if(empty($title)) {
+        $error = "Quiz title is required.";
+    } elseif(empty($description)) {
+        $error = "Quiz description is required.";
+    } elseif($timeLimit < 1) {
+        $error = "Time limit must be at least 1 minute.";
+    } else {
+        $sql = "INSERT INTO quizzes (quizTitle, description, timeLimit) 
+                VALUES ('$title','$description','$timeLimit')";
+        
+        if(mysqli_query($conn, $sql)) {
+            $success = "Quiz Created Successfully!";
+        } else {
+            $error = "Error: " . mysqli_error($conn);
+        }
+    }
 }
 ?>
 
