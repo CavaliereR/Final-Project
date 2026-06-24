@@ -10,11 +10,11 @@ if (!isset($_SESSION['userID'])) {
 $studentID = $_SESSION['userID'];
 $quizID = $_POST['quizID'];
 
-// Function to handle file uploads
+
 function uploadFile($file, $questionID, $studentID, $quizID) {
     $target_dir = "uploads/";
     
-    // Create uploads directory if it doesn't exist
+
     if (!file_exists($target_dir)) {
         mkdir($target_dir, 0777, true);
     }
@@ -26,7 +26,7 @@ function uploadFile($file, $questionID, $studentID, $quizID) {
         return ["error" => "Invalid file type. Only JPG, PNG, GIF, PDF, DOC, and TXT files are allowed."];
     }
     
-    if ($file["size"] > 5000000) { // 5MB limit
+    if ($file["size"] > 5000000) {
         return ["error" => "File is too large. Maximum size is 5MB."];
     }
     
@@ -43,30 +43,30 @@ function uploadFile($file, $questionID, $studentID, $quizID) {
 $score = 0;
 $total = 0;
 
-// Process each question
+
 foreach ($_POST['answer'] as $questionID => $answer) {
     $total++;
     
-    // Check if this is a file upload question
+ 
     $questionType = isset($_POST['question_type_' . $questionID]) ? $_POST['question_type_' . $questionID] : 'mcq';
     
     if ($questionType == 'file') {
-        // Handle file upload
+ 
         $fileKey = 'file_' . $questionID;
         if (isset($_FILES[$fileKey]) && $_FILES[$fileKey]['error'] === 0) {
             $uploadResult = uploadFile($_FILES[$fileKey], $questionID, $studentID, $quizID);
             if (isset($uploadResult['success'])) {
-                // File uploaded successfully - give points
+             
                 $score++;
                 $filePath = $uploadResult['success'];
                 
-                // Save to submissions table
+               
                 mysqli_query($conn, "INSERT INTO submissions (studentID, questionID, quizID, filePath) 
                                      VALUES ('$studentID', '$questionID', '$quizID', '$filePath')");
             }
         }
     } else {
-        // Regular MCQ question
+   
         $sql = "SELECT answer FROM questions WHERE questionID='$questionID'";
         $result = mysqli_query($conn, $sql);
         $row = mysqli_fetch_assoc($result);
@@ -77,7 +77,7 @@ foreach ($_POST['answer'] as $questionID => $answer) {
     }
 }
 
-// Insert results
+
 mysqli_query($conn, "INSERT INTO results (studentID, quizID, score) VALUES ('$studentID', '$quizID', '$score')");
 ?>
 

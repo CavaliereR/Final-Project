@@ -11,7 +11,7 @@ $quizID = $_GET['id'];
 $error = '';
 $success = '';
 
-// Get quiz data!!!!!
+
 $quiz = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM quizzes WHERE quizID='$quizID'"));
 
 if (!$quiz) {
@@ -37,7 +37,7 @@ if(isset($_POST['update']))
         
         if(mysqli_query($conn, $sql)) {
             $success = "Quiz Updated Successfully!";
-            // Refresh data
+      
             $quiz = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM quizzes WHERE quizID='$quizID'"));
         } else {
             $error = "Error: " . mysqli_error($conn);

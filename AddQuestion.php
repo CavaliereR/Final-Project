@@ -2,7 +2,7 @@
 session_start();
 include("Database.php");
 
-// Check if teacher is logged in
+
 if (!isset($_SESSION['userID']) || $_SESSION['role'] !== 'Teacher') {
     header("Location: index.php");
     exit();
@@ -12,16 +12,16 @@ $quizID = $_GET['id'];
 $message = '';
 $error = '';
 
-// Handle question deletion
+
 if (isset($_GET['delete'])) {
     $questionID = $_GET['delete'];
     
-    // Check if this question has submissions (file uploads)
+
     $checkSubmissions = mysqli_query($conn, "SELECT * FROM submissions WHERE questionID='$questionID'");
     if (mysqli_num_rows($checkSubmissions) > 0) {
         $error = "Cannot delete this question because students have already submitted files for it.";
     } else {
-        // Delete the question
+
         $deleteQuery = "DELETE FROM questions WHERE questionID='$questionID' AND quizID='$quizID'";
         if (mysqli_query($conn, $deleteQuery)) {
             $message = "Question deleted successfully!";
@@ -36,7 +36,7 @@ if(isset($_POST['save']))
     $question = trim($_POST['question']);
     $question_type = $_POST['question_type'];
     
-    // Validate question text
+
     if (empty($question)) {
         $error = "Question text is required.";
     } elseif ($question_type == 'mcq') {
@@ -45,14 +45,13 @@ if(isset($_POST['save']))
         $c = trim($_POST['c']);
         $d = trim($_POST['d']);
         $answer = trim($_POST['answer']);
-        
-        // Validate MCQ fields
+   
         if (empty($a) || empty($b) || empty($c) || empty($d)) {
             $error = "All choices (A, B, C, D) are required.";
         } elseif (empty($answer)) {
             $error = "Correct answer is required. Please enter the correct choice.";
         } else {
-            // Check if answer matches one of the choices
+ 
             $validAnswers = array($a, $b, $c, $d);
             if (!in_array($answer, $validAnswers)) {
                 $error = "Correct answer must match one of the provided choices.";
@@ -68,7 +67,7 @@ if(isset($_POST['save']))
             }
         }
     } else {
-        // File upload question - no choices needed
+
         $sql = "INSERT INTO questions (quizID, questionText, choiceA, choiceB, choiceC, choiceD, answer, question_type)
                 VALUES ('$quizID', '$question', '', '', '', '', '', 'file')";
         
@@ -80,7 +79,7 @@ if(isset($_POST['save']))
     }
 }
 
-// Get quiz title for display
+
 $quiz = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM quizzes WHERE quizID='$quizID'"));
 ?>
 

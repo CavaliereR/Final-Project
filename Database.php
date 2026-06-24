@@ -1,11 +1,7 @@
 <?php
 
 $conn = mysqli_connect(
-    "localhost",
-    "root",
-    "",
-    "onlinequizdb"
-);
+    "localhost", "root", "", "onlinequizdb");
 
 if(!$conn)
 {

@@ -2,13 +2,13 @@
 session_start();
 include("Database.php");
 
-// Clear cookies if Remember Me is unchecked
+
 if (isset($_POST['login'])) {
     $email = $_POST['email'];
     $password = $_POST['password'];
     $remember = isset($_POST['remember']) ? true : false;
 
-    // If Remember Me is unchecked, clear any existing cookies
+  
     if (!$remember) {
         setcookie('user_email', '', time() - 3600, "/");
         setcookie('user_password', '', time() - 3600, "/");
@@ -26,7 +26,6 @@ if (isset($_POST['login'])) {
             $_SESSION['fullname'] = $row['fullname'];
             $_SESSION['email'] = $row['email'];
 
-            // Set cookies if Remember Me is checked
             if ($remember) {
                 setcookie('user_email', $email, time() + (86400 * 30), "/"); // 30 days
                 setcookie('user_password', $password, time() + (86400 * 30), "/");
@@ -46,7 +45,7 @@ if (isset($_POST['login'])) {
     }
 }
 
-// Auto-login with cookies (if cookies exist and user isn't already logged in)
+
 if (!isset($_SESSION['userID']) && isset($_COOKIE['user_email']) && isset($_COOKIE['user_password'])) {
     $email = $_COOKIE['user_email'];
     $password = $_COOKIE['user_password'];
@@ -70,12 +69,10 @@ if (!isset($_SESSION['userID']) && isset($_COOKIE['user_email']) && isset($_COOK
             }
             exit();
         } else {
-            // Invalid password in cookie, clear it
             setcookie('user_email', '', time() - 3600, "/");
             setcookie('user_password', '', time() - 3600, "/");
         }
     } else {
-        // Invalid email in cookie, clear it
         setcookie('user_email', '', time() - 3600, "/");
         setcookie('user_password', '', time() - 3600, "/");
     }

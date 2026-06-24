@@ -4,7 +4,6 @@ include("Database.php");
 
 $studentID = $_SESSION['userID'];
 
-// Get all quiz attempts
 $result = mysqli_query($conn, "
     SELECT r.*, q.quizTitle 
     FROM results r

@@ -27,10 +27,10 @@ $result = mysqli_query($conn, "SELECT * FROM quizzes");
 
         <?php
         while($row=mysqli_fetch_assoc($result)) {
-            // Count questions
+
             $countQuery = mysqli_query($conn, "SELECT COUNT(*) as total, 
-                                               SUM(CASE WHEN question_type='file' THEN 1 ELSE 0 END) as file_count 
-                                               FROM questions WHERE quizID='" . $row['quizID'] . "'");
+                                            SUM(CASE WHEN question_type='file' THEN 1 ELSE 0 END) as file_count 
+                                            FROM questions WHERE quizID='" . $row['quizID'] . "'");
             $countData = mysqli_fetch_assoc($countQuery);
             $totalQ = $countData['total'] ?? 0;
             $fileQ = $countData['file_count'] ?? 0;

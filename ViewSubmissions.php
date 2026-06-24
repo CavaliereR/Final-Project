@@ -9,7 +9,7 @@ if (!isset($_SESSION['userID']) || $_SESSION['role'] !== 'Teacher') {
 
 $quizID = isset($_GET['id']) ? $_GET['id'] : 0;
 
-// Get all submissions for this quiz
+
 $submissions = mysqli_query($conn, "
     SELECT s.*, u.fullname, q.questionText 
     FROM submissions s

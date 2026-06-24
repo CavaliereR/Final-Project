@@ -12,28 +12,28 @@ if(isset($_POST['register']))
     $password = $_POST['password'];
     $role = $_POST['role'];
     
-    // Validate email format
+
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $error = "Please enter a valid email address.";
     }
-    // Check if email already exists
+
     else {
         $check = mysqli_query($conn, "SELECT * FROM users WHERE email='$email'");
         if(mysqli_num_rows($check) > 0) {
             $error = "Email already registered. Please use a different email.";
         } else {
-            // Hash password
+          
             $password = password_hash($password, PASSWORD_DEFAULT);
             
-            // Generate verification code
+      
             $verification_code = (string)random_int(100000, 999999);
             
-            // Insert user
+
             $sql = "INSERT INTO users (fullname, email, password, role, verification_code, is_verified) 
                     VALUES ('$fullname', '$email', '$password', '$role', '$verification_code', 0)";
             
             if(mysqli_query($conn, $sql)) {
-                // Send OTP email
+       
                 $subject = "Verify Your Email - Quiz System";
                 $msg = "Hello " . $fullname . ",\n\n";
                 $msg .= "Thank you for registering on the Quiz System.\n\n";
@@ -42,7 +42,7 @@ if(isset($_POST['register']))
                 $headers = "From: noreply@quizsystem.com\r\n";
                 
                 if(mail($email, $subject, $msg, $headers)) {
-                    // Store in session for verification
+       
                     $_SESSION['temp_email'] = $email;
                     $_SESSION['temp_fullname'] = $fullname;
                     $_SESSION['verification_code'] = $verification_code;

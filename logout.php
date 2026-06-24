@@ -1,12 +1,11 @@
 <?php
 session_start();
 
-// Check if user confirmed logout
+
 if (isset($_GET['confirm']) && $_GET['confirm'] === 'yes') {
-    // Clear session
+ 
     session_destroy();
     
-    // Clear remember me cookies
     setcookie('user_email', '', time() - 3600, "/");
     setcookie('user_password', '', time() - 3600, "/");
     

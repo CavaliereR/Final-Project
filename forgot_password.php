@@ -1,12 +1,12 @@
 <?php
 session_start();
 
-// Database connection
+
 $connection = mysqli_connect(
     "localhost",
     "root",
     "",
-    "onlinequizdb"  // Using the new database
+    "onlinequizdb" 
 );
 
 if (!$connection) {
@@ -20,8 +20,7 @@ $role = isset($_GET['role']) ? $_GET['role'] : '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $fullname = mysqli_real_escape_string($connection, $_POST['fullname']);
     $role = mysqli_real_escape_string($connection, $_POST['role']);
-    
-    // Query the users table
+
     $query = "SELECT * FROM users WHERE fullname = '$fullname' AND role = '$role'";
     $result = mysqli_query($connection, $query);
     
@@ -31,8 +30,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['reset_fullname'] = $fullname;
         $_SESSION['reset_role'] = $role;
         $_SESSION['reset_userID'] = $user['userID'];
-        $_SESSION['reset_password'] = $user['password']; // For display only
-        $_SESSION['reset_email'] = $user['email']; // Pre-fill email
+        $_SESSION['reset_password'] = $user['password'];
+        $_SESSION['reset_email'] = $user['email']; 
         
         header('Location: forgot_password_enter_email.php');
         exit;

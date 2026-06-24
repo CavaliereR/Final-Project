@@ -9,7 +9,7 @@ if (!isset($_SESSION['userID'])) {
 
 $resultID = $_GET['id'];
 
-// Get the result and quiz details
+
 $result = mysqli_fetch_assoc(mysqli_query($conn, "
     SELECT r.*, q.quizTitle, q.quizID
     FROM results r
@@ -47,7 +47,7 @@ $questions = mysqli_query($conn, "SELECT * FROM questions WHERE quizID = '" . $r
                     <?php if($q['question_type'] == 'file'): ?>
                         <p><strong>File Upload Question</strong></p>
                         <?php
-                        // Check if student uploaded a file
+                   
                         $submission = mysqli_fetch_assoc(mysqli_query($conn, 
                             "SELECT * FROM submissions WHERE studentID = '" . $_SESSION['userID'] . "' 
                              AND questionID = '" . $q['questionID'] . "' AND quizID = '" . $result['quizID'] . "'"

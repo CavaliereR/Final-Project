@@ -16,7 +16,7 @@ if(isset($_POST['save']))
     $description = trim($_POST['description']);
     $timeLimit = (int)$_POST['timeLimit'];
     
-    // Validation
+
     if(empty($title)) {
         $error = "Quiz title is required.";
     } elseif(empty($description)) {

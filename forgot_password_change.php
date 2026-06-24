@@ -1,13 +1,9 @@
 <?php
 session_start();
 
-// Database connection
+
 $connection = mysqli_connect(
-    "localhost",
-    "root",
-    "",
-    "onlinequizdb"
-);
+    "localhost","root","","onlinequizdb");
 
 if (!$connection) {
     die("Connection failed: " . mysqli_connect_error());
@@ -33,26 +29,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $email = $_SESSION['reset_email'];
         $role = $_SESSION['reset_role'];
         
-        // Hash the new password (matches his login system)
+  
         $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
         
-        // Update the users table
+ 
         $query = "UPDATE users SET password = '$hashedPassword' WHERE email = '$email' AND role = '$role'";
         
         if (mysqli_query($connection, $query)) {
             $message = 'Password updated successfully!';
             
-            // Auto-login the user
+
             $_SESSION['userID'] = $_SESSION['reset_userID'];
             $_SESSION['role'] = $role;
             $_SESSION['fullname'] = $_SESSION['reset_fullname'];
             
-            // Clear reset session data
+
             unset($_SESSION['reset_email'], $_SESSION['reset_role'], $_SESSION['reset_userID']);
             unset($_SESSION['reset_fullname'], $_SESSION['reset_password']);
             unset($_SESSION['otp_verified'], $_SESSION['otp'], $_SESSION['otp_sent'], $_SESSION['otp_time']);
             
-            // Redirect based on role
+
             if ($role == "Teacher") {
                 echo '<meta http-equiv="refresh" content="3;url=TeacherDashboard.php">';
             } else {

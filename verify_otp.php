@@ -13,11 +13,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $entered_otp = trim($_POST['otp']);
     
     if ($entered_otp == $_SESSION['verification_code']) {
-        // Verify user
+ 
         $email = $_SESSION['temp_email'];
         mysqli_query($conn, "UPDATE users SET is_verified = 1 WHERE email='$email'");
         
-        // Clear session
+      
         unset($_SESSION['temp_email'], $_SESSION['temp_fullname'], $_SESSION['verification_code']);
         
         header("Location: index.php?verified=1");

@@ -86,7 +86,6 @@ $questions = mysqli_query($conn, "SELECT * FROM questions WHERE quizID='$quizID'
                     </h5>
 
                     <?php if ($row['question_type'] == 'file'): ?>
-                        <!-- File Upload Question -->
                         <div class="file-upload-box">
                             <i class="fas fa-cloud-upload-alt"></i>
                             <p class="mt-2">Upload your file for this question</p>
@@ -101,7 +100,7 @@ $questions = mysqli_query($conn, "SELECT * FROM questions WHERE quizID='$quizID'
                         <input type="hidden" name="question_type_<?php echo $row['questionID']; ?>" value="file">
                         
                     <?php else: ?>
-                        <!-- Multiple Choice Question -->
+                      
                         <?php
                         $choices = [
                             'choiceA' => $row['choiceA'],
@@ -140,7 +139,7 @@ $questions = mysqli_query($conn, "SELECT * FROM questions WHERE quizID='$quizID'
 </div>
 
 <script>
-    // Timer functionality
+
     let time = <?php echo $quiz['timeLimit'] * 60; ?>;
     
     setInterval(function() {
