@@ -55,7 +55,7 @@ $questions = mysqli_query($conn, "SELECT * FROM questions WHERE quizID='$quizID'
 </head>
 <body>
 
-<div class="container mt-5">
+<div class="container py-5">
     <div class="d-flex justify-content-between align-items-center">
         <div>
             <h2><?php echo htmlspecialchars($quiz['quizTitle']); ?></h2>

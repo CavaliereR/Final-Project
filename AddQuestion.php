@@ -123,11 +123,64 @@ $quiz = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM quizzes WHERE quiz
             color: #a71d2a;
             transform: scale(1.1);
         }
+        body{
+    background:#f8f9fa;
+}
+
+.card{
+    border:none;
+    border-radius:20px;
+    box-shadow:0 5px 20px rgba(0,0,0,.08);
+}
+
+.card-header{
+    background:#dc3545 !important;
+    color:white !important;
+}
+
+.btn-primary,
+.btn-success,
+.bg-primary{
+    background:#dc3545 !important;
+    border-color:#dc3545 !important;
+}
+
+.btn-primary:hover,
+.btn-success:hover{
+    background:#bb2d3b !important;
+    border-color:#bb2d3b !important;
+}
+
+.form-control:focus{
+    border-color:#dc3545;
+    box-shadow:0 0 0 .25rem rgba(220,53,69,.15);
+}
+
+.table thead th{
+    background:#dc3545 !important;
+    color:white !important;
+}
+
+.table tbody tr:hover{
+    background:#fff5f5;
+}
+
+.alert{
+    border-radius:12px;
+}
+
+.btn{
+    border-radius:10px;
+}
+
+.badge.bg-primary{
+    background:#dc3545 !important;
+}
     </style>
 </head>
 <body>
 
-<div class="container mt-5">
+<div class="container py-5">
     <div class="card">
         <div class="card-header bg-primary text-white">
             <h4>Add Question to: <?php echo htmlspecialchars($quiz['quizTitle']); ?></h4>
@@ -172,7 +225,7 @@ $quiz = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM quizzes WHERE quiz
                     <textarea name="question" class="form-control" rows="3" placeholder="Enter your question" required></textarea>
                 </div>
 
-                <!-- MCQ Fields -->
+           
                 <div id="mcqFields">
                     <div class="mb-2">
                         <label class="form-label required-field">Choice A</label>
@@ -197,7 +250,7 @@ $quiz = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM quizzes WHERE quiz
                     </div>
                 </div>
 
-                <!-- File Upload Info -->
+             
                 <div id="fileFields" style="display:none;">
                     <div class="alert alert-info">
                         <i class="fas fa-info-circle"></i> 
@@ -215,7 +268,7 @@ $quiz = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM quizzes WHERE quiz
         </div>
     </div>
 
-    <!-- Show existing questions with delete option -->
+   
     <div class="card mt-4">
         <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
             <h5 class="mb-0">Existing Questions</h5>
@@ -282,13 +335,13 @@ $quiz = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM quizzes WHERE quiz
 </div>
 
 <script>
-    // Toggle between MCQ and File Upload fields
+
     document.querySelectorAll('input[name="question_type"]').forEach(function(radio) {
         radio.addEventListener('change', function() {
             if (this.value === 'mcq') {
                 document.getElementById('mcqFields').style.display = 'block';
                 document.getElementById('fileFields').style.display = 'none';
-                // Make MCQ fields required
+             
                 document.querySelectorAll('#mcqFields input').forEach(function(input) {
                     if (input.name !== 'answer') {
                         input.required = true;
@@ -298,7 +351,7 @@ $quiz = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM quizzes WHERE quiz
             } else {
                 document.getElementById('mcqFields').style.display = 'none';
                 document.getElementById('fileFields').style.display = 'block';
-                // Make MCQ fields not required
+
                 document.querySelectorAll('#mcqFields input').forEach(function(input) {
                     input.required = false;
                 });
@@ -307,7 +360,7 @@ $quiz = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM quizzes WHERE quiz
     });
 </script>
 
-<!-- Bootstrap JS for alert dismissal -->
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
