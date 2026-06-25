@@ -61,64 +61,49 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['enteredotp'])) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body {
-            background-color: #f0f0f0;
+            background: #f8f9fa;
             min-height: 100vh;
             display: flex;
             align-items: center;
         }
-        
-        .school-header {
-            background-color: #8B0000;
-            color: white;
-            padding: 15px 0;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-        }
-        
         .otp-container {
-            background-color: white;
-            border-radius: 15px;
-            padding: 40px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-            margin-top: 80px;
-            max-width: 500px;
+            max-width: 400px;
             width: 100%;
-            margin-left: auto;
-            margin-right: auto;
+            margin: 0 auto;
         }
-        
-        .otp-container .icon-circle {
-            width: 80px;
-            height: 80px;
-            background-color: #f8f9fa;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 20px;
+        .card {
+            border: none;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+            overflow: hidden;
         }
-        
-        .otp-container .icon-circle i {
-            font-size: 40px;
-            color: #8B0000;
-        }
-        
-        .otp-container h3 {
+        .card-header {
+            background: #8B0000 !important;
+            color: white !important;
             text-align: center;
-            color: #333;
+            padding: 20px;
+            border: none;
+        }
+        .card-header h4 {
+            margin: 0;
             font-weight: 600;
         }
-        
-        .otp-container .sub-text {
+        .card-body {
+            padding: 30px;
             text-align: center;
-            color: #666;
-            margin-bottom: 25px;
         }
-        
+        .btn-primary {
+            background: #8B0000 !important;
+            border-color: #8B0000 !important;
+            border-radius: 10px;
+            padding: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            background: #6d0000 !important;
+            border-color: #6d0000 !important;
+        }
         .form-control {
             border-radius: 10px;
             padding: 12px 15px;
@@ -127,34 +112,51 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['enteredotp'])) {
             font-size: 24px;
             letter-spacing: 10px;
         }
-        
         .form-control:focus {
             border-color: #8B0000;
             box-shadow: 0 0 0 0.2rem rgba(139, 0, 0, 0.15);
         }
-        
-        .btn-verify {
-            background-color: #8B0000;
-            color: white;
-            padding: 12px;
+        .alert {
             border-radius: 10px;
+        }
+        .icon-circle {
+            width: 70px;
+            height: 70px;
+            background: #f8f9fa;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+        }
+        .icon-circle i {
+            font-size: 35px;
+            color: #8B0000;
+        }
+        .back-link {
+            color: #8B0000;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .btn-verify {
+            background: #8B0000 !important;
+            border-color: #8B0000 !important;
+            border-radius: 10px;
+            padding: 12px;
             font-weight: 600;
             width: 100%;
+            color: white;
             border: none;
-            cursor: pointer;
             transition: all 0.3s ease;
         }
-        
         .btn-verify:hover {
-            background-color: #6d0000;
+            background: #6d0000 !important;
         }
-        
-        .btn-verify i {
-            margin-right: 8px;
-        }
-        
         .btn-resend {
-            background-color: #6c757d;
+            background: #6c757d;
             color: white;
             padding: 10px 20px;
             border-radius: 10px;
@@ -164,122 +166,88 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['enteredotp'])) {
             display: inline-block;
             transition: all 0.3s ease;
         }
-        
         .btn-resend:hover {
-            background-color: #5a6268;
+            background: #5a6268;
             color: white;
         }
-        
-        .alert {
-            border-radius: 10px;
-        }
-        
-        .back-link {
-            color: #8B0000;
-            text-decoration: none;
-            font-weight: 500;
-        }
-        
-        .back-link:hover {
-            text-decoration: underline;
-        }
-        
-        .password-hash {
-            background-color: #f8f9fa;
-            padding: 10px;
-            border-radius: 8px;
-            font-family: monospace;
-            word-break: break-all;
-        }
-        
-        .otp-timer {
-            color: #666;
-            font-size: 14px;
-        }
-        
         .info-box {
-            background-color: #cce5ff;
+            background: #cce5ff;
             border: 1px solid #b8daff;
             border-radius: 10px;
             padding: 15px;
             margin: 15px 0;
+            text-align: left;
+        }
+        .otp-timer {
+            color: #666;
+            font-size: 14px;
         }
     </style>
 </head>
 <body>
-    <!-- School Header -->
-    <div class="school-header">
-        <div class="container">
-            <div class="d-flex align-items-center">
-                <a href="forgot_password_enter_email.php" class="text-white text-decoration-none">
-                    <i class="fas fa-arrow-left me-2"></i>
-                </a>
-                <h4 class="flex-grow-1 text-center">🏫 OTP Verification</h4>
-            </div>
-        </div>
-    </div>
-
-    <!-- OTP Form -->
     <div class="container">
         <div class="otp-container">
-            <div class="icon-circle">
-                <i class="fas fa-shield-alt"></i>
-            </div>
-            <h3>Enter Your OTP</h3>
-            <p class="sub-text">We've sent a verification code to your email</p>
-            
-            <?php if ($message): ?>
-                <div class="alert alert-success">
-                    <i class="fas fa-check-circle me-2"></i>
-                    <?php echo htmlspecialchars($message); ?>
+            <div class="card">
+                <div class="card-header">
+                    <h4>🏫 OTP Verification</h4>
                 </div>
-            <?php endif; ?>
+                <div class="card-body">
+                    <div class="icon-circle">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h5>Enter Your OTP</h5>
+                    <p class="text-muted">We've sent a verification code to your email</p>
+                    
+                    <?php if ($message): ?>
+                        <div class="alert alert-success">
+                            <i class="fas fa-check-circle me-2"></i>
+                            <?php echo htmlspecialchars($message); ?>
+                        </div>
+                    <?php endif; ?>
 
-            <?php if ($error): ?>
-                <div class="alert alert-danger">
-                    <i class="fas fa-exclamation-circle me-2"></i>
-                    <?php echo htmlspecialchars($error); ?>
+                    <?php if ($error): ?>
+                        <div class="alert alert-danger">
+                            <i class="fas fa-exclamation-circle me-2"></i>
+                            <?php echo htmlspecialchars($error); ?>
+                        </div>
+                    <?php endif; ?>
+
+                    <div class="info-box">
+                        <i class="fas fa-envelope me-2"></i>
+                        We have sent an email to <strong><?php echo htmlspecialchars($senderemail); ?></strong> with the OTP.
+                    </div>
+                    
+                    <p class="otp-timer">
+                        <i class="fas fa-clock me-1"></i> OTP expires in 10 minutes
+                    </p>
+
+                    <form method="post" action="forgot_password_enter_otp.php">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Enter OTP Code</label>
+                            <input type="text" class="form-control" name="enteredotp" 
+                                placeholder="000000" maxlength="6" required>
+                            <small class="text-muted">Enter the 6-digit code sent to your email</small>
+                        </div>
+
+                        <button type="submit" class="btn-verify">
+                            <i class="fas fa-check-circle me-2"></i> Verify OTP
+                        </button>
+                    </form>
+                    
+                    <div class="mt-3">
+                        <a href="forgot_password_enter_email.php" class="btn-resend">
+                            <i class="fas fa-redo me-1"></i> Resend OTP
+                        </a>
+                    </div>
+                    
+                    <div class="mt-3">
+                        <a href="forgot_password.php" class="back-link">
+                            <i class="fas fa-arrow-left me-1"></i> Start Over
+                        </a>
+                    </div>
                 </div>
-            <?php endif; ?>
-
-            <div class="info-box">
-                <i class="fas fa-envelope me-2"></i>
-                We have sent an email to <strong><?php echo htmlspecialchars($senderemail); ?></strong> with the OTP.
-            </div>
-            
-            <p class="otp-timer">
-                <i class="fas fa-clock me-1"></i> OTP expires in 10 minutes
-            </p>
-            
-            <br>
-            <br><br>
-
-            <form method="post" action="forgot_password_enter_otp.php">
-                <div class="mb-3">
-                    <label for="enteredotp" class="form-label fw-bold">Enter OTP Code</label>
-                    <input type="text" class="form-control" id="enteredotp" name="enteredotp" 
-                           placeholder="000000" maxlength="6" required>
-                    <small class="text-muted">Enter the 6-digit code sent to your email</small>
-                </div>
-
-                <button type="submit" class="btn-verify">
-                    <i class="fas fa-check-circle"></i> Verify OTP
-                </button>
-            </form>
-            
-            <div class="text-center mt-3">
-                <a href="forgot_password_enter_email.php" class="btn-resend">
-                    <i class="fas fa-redo"></i> Resend OTP
-                </a>
-            </div>
-            
-            <div class="text-center mt-3">
-                <a href="forgot_password.php" class="back-link">
-                    <i class="fas fa-arrow-left"></i> Start Over
-                </a>
             </div>
         </div>
     </div>
-
 </body>
 </html>

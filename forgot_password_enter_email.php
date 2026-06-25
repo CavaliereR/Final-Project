@@ -33,94 +33,122 @@ $currentEmail = $_SESSION['reset_email'] ?? '';
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body {
-            background-color: #f0f0f0;
+            background: #f8f9fa;
             min-height: 100vh;
             display: flex;
             align-items: center;
         }
-        .school-header {
-            background-color: #8B0000;
-            color: white;
-            padding: 15px 0;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-        }
         .email-container {
-            background-color: white;
-            border-radius: 15px;
-            padding: 40px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-            margin-top: 80px;
-            max-width: 450px;
+            max-width: 400px;
             width: 100%;
-            margin-left: auto;
-            margin-right: auto;
+            margin: 0 auto;
+        }
+        .card {
+            border: none;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+        .card-header {
+            background: #8B0000 !important;
+            color: white !important;
+            text-align: center;
+            padding: 20px;
+            border: none;
+        }
+        .card-header h4 {
+            margin: 0;
+            font-weight: 600;
+        }
+        .card-body {
+            padding: 30px;
+            text-align: center;
+        }
+        .btn-primary {
+            background: #8B0000 !important;
+            border-color: #8B0000 !important;
+            border-radius: 10px;
+            padding: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            background: #6d0000 !important;
+            border-color: #6d0000 !important;
+        }
+        .form-control {
+            border-radius: 10px;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+        }
+        .form-control:focus {
+            border-color: #8B0000;
+            box-shadow: 0 0 0 0.2rem rgba(139, 0, 0, 0.15);
+        }
+        .alert {
+            border-radius: 10px;
+        }
+        .back-link {
+            color: #8B0000;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .back-link:hover {
+            text-decoration: underline;
         }
         .btn-send {
-            background-color: #8B0000;
-            color: white;
-            padding: 12px;
+            background: #8B0000 !important;
+            border-color: #8B0000 !important;
             border-radius: 10px;
+            padding: 12px;
             font-weight: 600;
             width: 100%;
+            color: white;
             border: none;
-            cursor: pointer;
             transition: all 0.3s ease;
         }
         .btn-send:hover {
-            background-color: #6d0000;
-        }
-        .alert-danger {
-            border-radius: 10px;
+            background: #6d0000 !important;
         }
     </style>
 </head>
 <body>
-    <div class="school-header">
-        <div class="container">
-            <div class="d-flex align-items-center">
-                <a href="forgot_password.php" class="text-white text-decoration-none">
-                    <i class="fas fa-arrow-left me-2"></i>
-                </a>
-                <h4 class="flex-grow-1 text-center">🏫 Email Verification</h4>
-            </div>
-        </div>
-    </div>
-
     <div class="container">
         <div class="email-container">
-            <h3 class="text-center">Enter Your Email</h3>
-            <p class="text-center text-muted">Welcome, <?php echo htmlspecialchars($fullname); ?>!</p>
-            
-            <?php if ($error): ?>
-                <div class="alert alert-danger">
-                    <i class="fas fa-exclamation-circle me-2"></i>
-                    <?php echo htmlspecialchars($error); ?>
+            <div class="card">
+                <div class="card-header">
+                    <h4>🏫 Email Verification</h4>
                 </div>
-            <?php endif; ?>
-            
-            <form method="post" action="forgot_password_enter_email.php">
-                <div class="mb-3">
-                    <label class="form-label fw-bold">Email Address</label>
-                    <input type="email" class="form-control" name="email" 
-                           value="<?php echo htmlspecialchars($currentEmail); ?>" required>
+                <div class="card-body">
+                    <h5>Enter Your Email</h5>
+                    <p class="text-muted">Welcome, <?php echo htmlspecialchars($fullname); ?>!</p>
+                    
+                    <?php if ($error): ?>
+                        <div class="alert alert-danger">
+                            <i class="fas fa-exclamation-circle me-2"></i>
+                            <?php echo htmlspecialchars($error); ?>
+                        </div>
+                    <?php endif; ?>
+                    
+                    <form method="post" action="forgot_password_enter_email.php">
+                        <div class="mb-3 text-start">
+                            <label class="form-label fw-bold">Email Address</label>
+                            <input type="email" class="form-control" name="email" 
+                                value="<?php echo htmlspecialchars($currentEmail); ?>" required>
+                        </div>
+                        <button type="submit" class="btn-send">
+                            <i class="fas fa-paper-plane me-2"></i> Send OTP
+                        </button>
+                    </form>
+                    
+                    <div class="mt-3">
+                        <a href="forgot_password.php" class="back-link">
+                            <i class="fas fa-arrow-left me-1"></i> Go Back
+                        </a>
+                    </div>
                 </div>
-                <button type="submit" class="btn-send">
-                    <i class="fas fa-paper-plane"></i> Send OTP
-                </button>
-            </form>
-            
-            <div class="text-center mt-3">
-                <a href="forgot_password.php" class="text-decoration-none">
-                    <i class="fas fa-arrow-left"></i> Go Back
-                </a>
             </div>
         </div>
     </div>
-
 </body>
 </html>
